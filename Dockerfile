@@ -3,18 +3,16 @@ FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-# Copy package files from root, backend, and frontend
+# Copy package files first for caching
 COPY package*.json ./
 COPY backend/package*.json ./backend/
 COPY frontend/package*.json ./frontend/
 
-# Install root, backend, and frontend dependencies
-RUN npm run render-build
-
-# Copy the rest of the application source code
+# Copy ALL source code BEFORE building
 COPY . .
 
-# Build the frontend static files
+# Install dependencies and build
+RUN npm run render-build
 RUN npm run build --prefix frontend
 
 # Step 2: Production Execution Environment
@@ -34,7 +32,7 @@ RUN npm ci --only=production --prefix backend
 
 # Copy backend source files and the compiled frontend build from builder
 COPY --from=builder /app/backend ./backend
-COPY --from=builder /app/frontend/dist ./frontend/dist
+COPY --from=builder /app/frontend/build ./frontend/build
 
 EXPOSE 10000
 
