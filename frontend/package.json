@@ -2,7 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "author": "Shivansh Vasu",
-  "private": true ,
+  "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^2.1.0",
     "react": "^18.2.0",
