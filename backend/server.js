@@ -7,8 +7,10 @@ const path = require('path');
 dotenv.config();
 connectDB();
 
+// 1. Initialize Express FIRST
+const app = express();
 
-// Set CORS for frontend URL / allow single-node deploy
+// 2. Add CORS and JSON middleware
 app.use(cors({
   origin: ['http://localhost:3000', 'http://127.0.0.1:3000', process.env.FRONTEND_URL],
   credentials: true
