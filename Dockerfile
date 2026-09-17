@@ -23,7 +23,7 @@ FROM node:18-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
-ENV PORT=5000
+ENV PORT=10000
 
 # Copy root and backend packages for production install
 COPY package*.json ./
@@ -34,8 +34,8 @@ RUN npm ci --only=production --prefix backend
 
 # Copy backend source files and the compiled frontend build from builder
 COPY --from=builder /app/backend ./backend
-COPY --from=builder /app/frontend/build ./frontend/build
+COPY --from=builder /app/frontend/dist ./frontend/dist
 
-EXPOSE 5000
+EXPOSE 10000
 
 CMD ["npm", "start", "--prefix", "backend"]
