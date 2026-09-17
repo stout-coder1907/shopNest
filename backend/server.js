@@ -7,10 +7,6 @@ const path = require('path');
 dotenv.config();
 connectDB();
 
-const app = express();
-app.get('/', (req, res) => {
-  res.send('ShopNest API is running...');
-});
 
 // Set CORS for frontend URL / allow single-node deploy
 app.use(cors({
