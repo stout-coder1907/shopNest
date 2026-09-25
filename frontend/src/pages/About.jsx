@@ -41,7 +41,7 @@ const About = () => {
       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '10px', marginTop: '20px' }}>
         <a href="https://www.linkedin.com/in/sudhanshu-yadavdtu/" target="_blank" rel="noreferrer" style={{ ...socialBtnStyle, background: 'rgba(59, 130, 246, 0.2)', borderColor: '#3b82f6', color: '#3b82f6' }}>💼 LinkedIn</a>
         <a href="mailto:ysudhanshu19@gmail.com" style={socialBtnStyle}>✉️ ysudhanshu19@gmail.com</a>
-        <a href="https://github.com/coder1907" target="_blank" rel="noreferrer" style={socialBtnStyle}>💻 GitHub</a>
+        <a href="https://github.com/stout-coder1907/" target="_blank" rel="noreferrer" style={socialBtnStyle}>💻 GitHub</a>
       </div>
     </div>
   );
