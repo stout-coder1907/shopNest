@@ -1,39 +1,45 @@
-# Step 1: Build Frontend & Backend Dependencies
+# ==========================================
+# Step 1: Build Frontend (Builder Stage)
+# ==========================================
 FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-# Copy package files first for caching
-COPY package*.json ./
-COPY backend/package*.json ./backend/
+# Copy dependency manifests first to leverage Docker layer caching
 COPY frontend/package*.json ./frontend/
 
-# Copy ALL source code BEFORE building
-COPY . .
+# Install frontend dependencies (cached unless frontend/package*.json changes)
+RUN npm ci --prefix frontend
 
-# Install dependencies and build
-RUN npm run render-build
+# Copy frontend source code
+COPY frontend/ ./frontend/
+
+# Build production static assets
 RUN npm run build --prefix frontend
 
-# Step 2: Production Execution Environment
+# ==========================================
+# Step 2: Production Execution Environment (Runner Stage)
+# ==========================================
 FROM node:18-alpine AS runner
 
 WORKDIR /app
 
 ENV NODE_ENV=production
-ENV PORT=10000
+ENV PORT=5000
 
-# Copy root and backend packages for production install
-COPY package*.json ./
+# Copy backend package manifests and install production-only dependencies
 COPY backend/package*.json ./backend/
+RUN npm ci --omit=dev --prefix backend
 
-# Install production dependencies only
-RUN npm ci --only=production --prefix backend
+# Copy backend source code
+COPY backend/ ./backend/
 
-# Copy backend source files and the compiled frontend build from builder
-COPY --from=builder /app/backend ./backend
+# Copy compiled frontend assets from builder stage
 COPY --from=builder /app/frontend/build ./frontend/build
 
-EXPOSE 10000
+# Ensure upload directory exists for Multer
+RUN mkdir -p backend/uploads uploads
+
+EXPOSE 5000
 
 CMD ["npm", "start", "--prefix", "backend"]

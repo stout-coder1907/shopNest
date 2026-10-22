@@ -3,6 +3,8 @@ version: '3.8'
 services:
   app:
     build: .
+    container_name: shopnest-app
+    restart: unless-stopped
     ports:
       - "5000:5000"
     environment:
@@ -13,15 +15,23 @@ services:
       - RAZORPAY_KEY_ID=your_key_id
       - RAZORPAY_KEY_SECRET=your_key_secret
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy
 
   mongo:
     image: mongo:latest
+    container_name: shopnest-mongo
+    restart: unless-stopped
     ports:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
 
 volumes:
   mongo-data:
-  
