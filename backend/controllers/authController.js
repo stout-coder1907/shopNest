@@ -24,7 +24,7 @@ const registerUser = async (req, res) => {
       // Send Welcome / OTP Email
       const message = `
         <h2>Welcome to ShopNest, ${name}!</h2>
-        <p>Thank you for registering on our platform.</p
+        <p>Thank you for registering on our platform.</p>
       `;
 
       await sendEmail({
