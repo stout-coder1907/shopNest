@@ -21,9 +21,6 @@ const registerUser = async (req, res) => {
     console.log('User created:', user);
     if (user) {
       
-      // Generate a mock OTP
-      const otp = Math.floor(100000 + Math.random() * 900000);
-      
       // Send Welcome / OTP Email
       const message = `
         <h2>Welcome to ShopNest, ${name}!</h2>
